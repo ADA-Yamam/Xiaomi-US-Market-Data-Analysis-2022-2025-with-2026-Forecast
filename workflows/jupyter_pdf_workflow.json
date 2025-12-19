@@ -1,1 +1,139 @@
-{}
+
+{
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "91815489-2066-4fb5-a6a9-dd70870b7805",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "184c0026-b634-46a4-87c5-81f2f1c7af9b",
+      "name": "When chat message received",
+      "webhookId": "264a9c9a-6b16-47d0-b230-1aa0bc843a53"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a Data Insights Interpretation Agent.\n\nIMPORTANT:\nYou will receive a PDF file as input.\n\nThis PDF contains FINAL RESULTS of a data analysis already executed in Jupyter Notebook.\nThe PDF may include:\n- Written textual results (e.g. Top 10 cities, summaries, conclusions)\n- Tables\n- Charts and plots\n\nYour task is to INTERPRET the CONTENT of the PDF only.\n\nRules:\n- Do NOT generate code.\n- Do NOT redo calculations.\n- Do NOT explain how the analysis was performed.\n- Do NOT assume access to raw data.\n- Treat all results in the PDF as correct and final.\n\nWhat you should do:\n1. Read and understand the textual insights in the PDF.\n2. Interpret rankings (e.g. \"Top 10 cities\") and explain their meaning.\n3. Extract key insights from tables and charts conceptually.\n4. Highlight important patterns, dominance, trends, or concentrations.\n5. Translate results into clear conclusions or implications.\n6. If relevant, provide high-level recommendations based on the results.\n\nOutput requirements:\n- Clear structured interpretation\n- Bullet points or short paragraphs\n- Business / analytical language\n- No technical or implementation details\n\nYour role is interpretation and insight generation only.\nAssume the PDF is the single source of truth.\nIf charts are present, interpret their trends conceptually without referring to axes or code.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7e8b13e1-fdce-488c-8976-4bf28ecd1ff8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "be137715-c0d4-4fa5-a001-6222a6642d6a",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sendTo": "yamamajamea2003@outlook.com",
+        "subject": "s",
+        "message": "s",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        0
+      ],
+      "id": "2ff6912f-3519-414c-b315-cc18abb676f3",
+      "name": "Send a message",
+      "webhookId": "05686509-a290-4ada-a903-50a04507fe1a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "s4lwLG9AEaOVNHgn",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2fcb0eb5-a367-473a-8f40-f4ef481610e6",
+  "meta": {
+    "instanceId": "2651e71813d8f985139f0a65a3d7b0939386e599dd0af82d42f61c3ee7b10cfd"
+  },
+  "id": "5IMV7apG0770KjcF",
+  "tags": []
+}
